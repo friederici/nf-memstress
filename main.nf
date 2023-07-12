@@ -6,6 +6,9 @@ process memstress {
   memory '1 GB'
   pod = [ [env: 'env_memory', value: '1000'], [env: 'env_time', value: '20'], [env: 'env_cores', value: '1'] ]
 
+  input:
+    val STR
+
   """
   echo "memstress"
   /mem.sh
@@ -13,11 +16,6 @@ process memstress {
 }
 
 workflow {
-  memstress()
-  memstress()
-  memstress()
-  memstress()
-  memstress()
-  memstress()
+  Channel.of('1', '2', '3', '4', '5') | memstress
 }
 
