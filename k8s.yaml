@@ -1,0 +1,55 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: memstress-namespace
+
+---
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  namespace: memstress-namespace
+  name: sauser
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  namespace: memstress-namespace
+  name: memstress-namespace-role
+rules:
+  - apiGroups: [""]
+    resources: ["pods","pods/status","pods/log","pods/exec","nodes","bindings","configmaps"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  namespace: memstress-namespace
+  name: memstress-namespace-rolebind
+roleRef:
+  kind: ClusterRole
+  name: memstress-namespace-role
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+  - kind: ServiceAccount
+    name: sauser
+    namespace: memstress-namespace
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  namespace: memstress-namespace
+  name: workspace-pvc
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 1G
+
