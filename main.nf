@@ -10,12 +10,12 @@ process memstress {
     val STR
 
   """
-  echo "memstress !{str}"
+  echo "memstress !{STR}"
   /mem.sh
   """
 }
 
 workflow {
-  Channel.of('1', '2', '3', '4', '5') | memstress()
+  Channel.of('1', '2', '3', '4', '5') | memstress
 }
 
