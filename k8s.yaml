@@ -42,14 +42,30 @@ subjects:
 ---
 
 apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: workspace-pv
+spec:
+  storageClassName: ""
+  accessModes:
+    - ReadWriteMany
+  capacity:
+    storage: 1Gi
+  hostPath:
+    path: /workspace
+
+---
+
+apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   namespace: memstress-namespace
   name: workspace-pvc
 spec:
+  volumeName: workspace-pv
+  storageClassName: ""
   accessModes:
-  - ReadWriteMany
+    - ReadWriteMany
   resources:
     requests:
-      storage: 1G
-
+      storage: 1Gi

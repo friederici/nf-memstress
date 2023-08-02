@@ -16,8 +16,8 @@ Java 11+, Docker
 
 ### minikube
 
-    # minikube cluster with two nodes
-    minikube start --nodes 2
+    # minikube cluster with two nodes, enable KEP 1287
+    minikube start --nodes 2 --feature-gates=InPlacePodVerticalScaling=true
 
     # use csi-hostpath-driver instead of default host-path provisioner
     minikube addons enable volumesnapshots
@@ -28,6 +28,12 @@ Java 11+, Docker
 
     # set up cluster
     minikube kubectl -- apply -f k8s.yaml
+
+    # mount hostfolder into cluster
+    minikube mount /workspace/:/workspace/ &
+    
+    # optional: view dashboard
+    minikube dashboard &
 
     # start workflow
     nextflow kuberun friederici/nf-memstress -r main -latest
